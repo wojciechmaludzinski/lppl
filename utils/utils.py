@@ -71,11 +71,14 @@ def calculate_metrics(y_true, y_pred, duration, y_true_val=None, y_pred_val=None
     return res
 
 
-def pred_beautifier(pred):
+def pred_beautifier2(pred):
     a = collections.Counter([round(item[0]) for item in pred])
     b = collections.Counter([round(item[1]) for item in pred])
     c = collections.Counter([round(item[2]) for item in pred])
     return a,b,c
 
-def pred_beautifier2(pred):
-    return pred
+
+def pred_beautifier(pred):
+    return [round(item[0]) for item in pred].count(1), \
+        [round(item[1]) for item in pred].count(1), \
+        [round(item[2]) for item in pred].count(1)
