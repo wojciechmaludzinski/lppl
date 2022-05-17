@@ -6,11 +6,13 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-df = pd.read_csv("data\\arrays.csv", header=None)
-df = df.sample(frac=1).reset_index(drop=True)
+# from tensorflow.python.client import device_lib
+#
+#
+# if __name__ == '__main__':
+#     print(device_lib.list_local_devices())
 
-
-y = df[df.columns[0]]
-X = df.iloc[: , 1:]
-
-X_train,X_test,y_train,y_test = train_test_split(X.index,y,test_size=0.2)
+import tensorflow as tf
+gpu = tf.config.experimental.list_physical_devices('GPU')
+print("Num GPUs Available: ", len(gpu))
+tf.config.experimental.set_memory_growth(gpu[0], True)

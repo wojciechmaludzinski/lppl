@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+
+import collections
 
 
 def save_logs(output_directory, hist, y_pred, y_true, duration, lr=True, y_true_val=None, y_pred_val=None):
@@ -53,10 +56,11 @@ def plot_epochs_metric(hist, file_name, metric='loss'):
 
 
 def calculate_metrics(y_true, y_pred, duration, y_true_val=None, y_pred_val=None):
-    res = pd.DataFrame(data=np.zeros((1, 4), dtype=np.float), index=[0],
-                       columns=['precision', 'accuracy', 'recall', 'duration'])
+    res = pd.DataFrame(data=np.zeros((1, 5), dtype=np.float), index=[0],
+                       columns=['precision', 'accuracy', 'f1', 'recall', 'duration'])
     res['precision'] = precision_score(y_true, y_pred, average='macro')
     res['accuracy'] = accuracy_score(y_true, y_pred)
+    res['f1'] = f1_score(y_true, y_pred, average='macro')
 
     if not y_true_val is None:
         # this is useful when transfer learning is used with cross validation
@@ -65,3 +69,13 @@ def calculate_metrics(y_true, y_pred, duration, y_true_val=None, y_pred_val=None
     res['recall'] = recall_score(y_true, y_pred, average='macro')
     res['duration'] = duration
     return res
+
+
+def pred_beautifier(pred):
+    a = collections.Counter([round(item[0]) for item in pred])
+    b = collections.Counter([round(item[1]) for item in pred])
+    c = collections.Counter([round(item[2]) for item in pred])
+    return a,b,c
+
+def pred_beautifier2(pred):
+    return pred
