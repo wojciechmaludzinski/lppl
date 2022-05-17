@@ -20,11 +20,6 @@ def fit_classifier(df, length):
     x_train = np.array(train_set.iloc[:, 1:])
     x_test = np.array(test_set.iloc[:, 1:])
 
-    # x_train = np.array(pd.read_csv('Earthquakes_TRAIN.csv', sep='  '))
-    # y_train = np.array(pd.read_csv('Earthquakes_TRAIN.csv', usecols=[0], sep='  '))
-    # x_test = np.array(pd.read_csv('Earthquakes_TEST.csv', sep='  '))
-    # y_test = np.array(pd.read_csv('Earthquakes_TEST.csv', usecols=[0], sep='  '))
-
     nb_classes = len(np.unique(np.concatenate((y_train, y_test), axis=0)))
 
     # transform the labels from integers to one hot vectors

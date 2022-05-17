@@ -1,13 +1,8 @@
 import pandas as pd
-import csv
 import numpy as np
 import random
-import seaborn as sns
 import matplotlib.pyplot as plt
 from math import pi
-
-input_path = "C:\\Users\\mmigala\\Desktop\\"
-input_file = "output.csv"
 
 
 def show_plot(data, title=" ", bottom=False):
@@ -87,7 +82,6 @@ for i in range(1000):
     amplitude = np.insert(amplitude, 0, 2)
     array_sin.append(amplitude[:-1])
 
-list_of_dfs = []
 dataframe_lp = pd.DataFrame(array_lp, columns=None)
 # dataframe_lp.to_csv('data\\array_lp.csv', index=False, header=False)
 
