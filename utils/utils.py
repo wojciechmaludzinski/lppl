@@ -75,10 +75,23 @@ def pred_beautifier2(pred):
     a = collections.Counter([round(item[0]) for item in pred])
     b = collections.Counter([round(item[1]) for item in pred])
     c = collections.Counter([round(item[2]) for item in pred])
-    return a,b,c
+    return a, b, c
 
 
 def pred_beautifier(pred):
     return [round(item[0]) for item in pred].count(1), \
-        [round(item[1]) for item in pred].count(1), \
-        [round(item[2]) for item in pred].count(1)
+           [round(item[1]) for item in pred].count(1), \
+           [round(item[2]) for item in pred].count(1)
+
+
+def pred_another(pred, df):
+    x = [np.argmax(item) for item in pred]
+    indexes = [index for index in range(len(x)) if x[index] == 1]
+    for index in indexes:
+        plt.plot(df.iloc[index])
+        plt.show()
+
+
+def pred_uglier(pred, df):
+    x = [item for item in pred if round(item[1]) == 1]
+    return x

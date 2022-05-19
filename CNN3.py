@@ -141,8 +141,8 @@ class Classifier_CNN:
             exit()
 
         # x_val and y_val are only used to monitor the test loss and NOT for training
-        mini_batch_size = 4
-        nb_epochs = 25
+        mini_batch_size = 10
+        nb_epochs = 80
 
         start_time = time.time()
 
