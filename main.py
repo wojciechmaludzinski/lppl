@@ -47,7 +47,6 @@ def prepare_data(df, length):
 
 
 def predict(clf, df):
-    # PREDICTION
     pred_rows_used = 1500
     df_smaller = df.iloc[:pred_rows_used, :DATA_SIZE - 1]
     print(pred_beautifier(clf.predicting(df_smaller)))
