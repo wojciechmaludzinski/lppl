@@ -12,11 +12,14 @@ from sklearn.model_selection import train_test_split
 from LPPL_fitting import LPPL_fit
 
 
-def load_data(path, columns):
-    return pd.read_csv(path, header=None).sample(frac=1).reset_index(drop=True).iloc[:, :columns]
+def load_data(path_or_df, columns, dataframe=False):
+    if dataframe:
+        return path_or_df.sample(frac=1).reset_index(drop=True).iloc[:, :columns]
+
+    return pd.read_csv(path_or_df, header=None).sample(frac=1).reset_index(drop=True).iloc[:, :columns]
 
 
-def prepare_data(df, length):
+def prepare_data(df):
     train_size = int(0.7 * len(df))
     train_set = df[:train_size]
     test_set = df[train_size:]
@@ -46,8 +49,7 @@ def prepare_data(df, length):
     return _x_train, _y_train, _x_test, _y_test, _y_true, _input_shape, _nb_classes
 
 
-def predict(clf, df):
-    pred_rows_used = 1500
+def predict(clf, df, pred_rows_used=500):
     df_smaller = df.iloc[:pred_rows_used, :DATA_SIZE - 1]
     print(pred_beautifier(clf.predicting(df_smaller)))
     print(pred_another(clf.predicting(df_smaller), df_smaller))
@@ -55,17 +57,61 @@ def predict(clf, df):
 
 if __name__ == '__main__':
     # os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-    output_directory = os.getcwd() + '\\classifier\\'
+    output_directory_path = os.getcwd() + '\\classifier\\'
     DATA_SIZE = 500
-    arr_filenames = ["array_500.csv", "df_noise.csv", "df_noise2.csv", "df_noise3.csv"]
+    # arr_filenames = ["df_noise2.csv",  "df_noise.csv", "df_noise3.csv"]
+    dataframes = [load_data(f"data\\df_noise.csv", DATA_SIZE),
+                  load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, :DATA_SIZE], DATA_SIZE,
+                            dataframe=True),  # 1,0
+                  load_data(pd.read_csv("data\\df_noise.csv", header=None,
+                                        skiprows=[i for i in range(1000, 2000)]), DATA_SIZE, dataframe=True),  # 1,2
+                  load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000], DATA_SIZE, dataframe=True)
+                  # 0,2
+                  ]
+    directories = ['noise', '10', '12', '02']
+    dataframes2 = [
+        load_data(f"data\\df_noise.csv", DATA_SIZE),
+        load_data(f"data\\df_noise2.csv", DATA_SIZE),
+        load_data(f"data\\df_noise3.csv", DATA_SIZE),
+        load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, :DATA_SIZE], DATA_SIZE, dataframe=True),  # 1,0
+        load_data(pd.read_csv("data\\df_noise.csv", header=None,
+                              skiprows=[i for i in range(1000, 2000)]), DATA_SIZE, dataframe=True),  # 1,2
+        load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000], DATA_SIZE, dataframe=True) #0,2
+    ]
+    #
 
-    for filename in arr_filenames:
-        df = load_data(f"data\\{filename}", DATA_SIZE)
-        x_train, y_train, x_test, y_test, y_true, input_shape, nb_classes = prepare_data(df, DATA_SIZE)
+    for df, directory in zip(dataframes, directories):
+        print('data loaded')
+        output_directory = output_directory_path+directory+'\\'
+
+        x_train, y_train, x_test, y_test, y_true, input_shape, nb_classes = prepare_data(df)
         classifier = CNN3.Classifier_CNN(output_directory, input_shape, nb_classes, verbose=False)
         classifier.fit(x_train, y_train, x_test, y_test, y_true)
         prediction = classifier.predict(x_test, y_true, x_train, y_train, y_test)
-        print(prediction)
-        predict(classifier, pd.read_csv("data\\array_btc2.csv", header=None))
-        predict(classifier, pd.read_csv("data\\array_eurpln.csv", header=None))
-        predict(classifier, pd.read_csv("data\\array_usdpln.csv", header=None))
+        print('PREDICTION:', prediction)
+        # predict(classifier, pd.read_csv("data\\array_eurpln.csv", header=None))
+
+        for _df in dataframes2:
+            _x_train, _y_train, _x_test, _y_test, _y_true, _input_shape, _nb_classes = prepare_data(_df)
+            print(_input_shape)
+            _prediction = classifier.predict(_x_test, _y_true, _x_train, _y_train, _y_test)
+            print('PREDICTION:', _prediction)
+
+
+        # print('prediction of 0,1,2:')
+        # predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[:, 1:],
+        #         pred_rows_used=3000)  # all
+        #
+        # print('prediction of 0,1:')
+        # predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, 1:],
+        #         pred_rows_used=2000)  # 1 and 0
+        # #
+        # print('prediction of 1,2:')
+        # predict(classifier, pd.read_csv("data\\df_noise.csv", header=None,
+        #                                 skiprows=[i for i in range(1000, 2001)]), pred_rows_used=2000)  # 1 and 2
+        #
+        # print('prediction of 0,2:')
+        # predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000, 1:],
+        #         pred_rows_used=2000)  # 0 and 2
+
+        print("-------------------------------finished")

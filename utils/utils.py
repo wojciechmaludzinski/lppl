@@ -38,12 +38,15 @@ def save_logs(output_directory, hist, y_pred, y_true, duration, lr=True, y_true_
     # for FCN there is no hyperparameters fine tuning - everything is static in code
 
     # plot losses
-    plot_epochs_metric(hist, output_directory + 'epochs_loss.png')
+    plot_epochs_metric(hist, output_directory + 'epochs_loss.png', show=True)
+    plot_epochs_metric(hist, output_directory + 'epochs_accuracy.png', metric='accuracy', show=True)
+    plot_epochs_metric(hist, output_directory + 'epochs_precision.png', metric='precision', show=True)
+    plot_epochs_metric(hist, output_directory + 'epochs_recall.png', metric='recall', show=True)
 
     return df_metrics
 
 
-def plot_epochs_metric(hist, file_name, metric='loss'):
+def plot_epochs_metric(hist, file_name, metric='loss', show=False):
     plt.figure()
     plt.plot(hist.history[metric])
     plt.plot(hist.history['val_' + metric])
@@ -52,6 +55,8 @@ def plot_epochs_metric(hist, file_name, metric='loss'):
     plt.xlabel('epoch', fontsize='large')
     plt.legend(['train', 'val'], loc='upper left')
     plt.savefig(file_name, bbox_inches='tight')
+    if show:
+        plt.show()
     plt.close()
 
 

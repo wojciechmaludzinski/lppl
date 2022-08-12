@@ -1,3 +1,4 @@
+import tensorflow
 import tensorflow.keras as keras
 import tensorflow as tf
 import numpy as np
@@ -59,43 +60,45 @@ class Classifier_CNN:
 
         model = keras.models.Sequential()
 
-        # model.add(keras.layers.Input(shape=input_shape))
+        model.add(keras.layers.Input(shape=input_shape))
 
         model.add(keras.layers.Conv1D(16, 64, strides=1, padding="same", input_shape=input_shape))
         model.add(keras.layers.BatchNormalization())
         model.add(keras.layers.Activation('relu'))
-        model.add(keras.layers.MaxPooling1D(3, strides=2, padding="valid"))
+        model.add(keras.layers.MaxPooling1D(nb_classes, strides=2, padding="valid"))
 
-        model.add(keras.layers.Conv1D(32, 3, strides=1, padding="same"))
+        model.add(keras.layers.Conv1D(32, nb_classes, strides=1, padding="same"))
         model.add(keras.layers.BatchNormalization())
         model.add(keras.layers.Activation('relu'))
-        model.add(keras.layers.MaxPooling1D(3, strides=2, padding="valid"))
+        model.add(keras.layers.MaxPooling1D(nb_classes, strides=2, padding="valid"))
 
-        model.add(keras.layers.Conv1D(64, 3, strides=1, padding="same"))
+        model.add(keras.layers.Conv1D(64, nb_classes, strides=1, padding="same"))
         model.add(keras.layers.BatchNormalization())
         model.add(keras.layers.Activation('relu'))
         model.add(keras.layers.MaxPooling1D(2, strides=2, padding="valid"))
+        model.add(keras.layers.Dropout(0.2))
 
-        model.add(keras.layers.Conv1D(64, 3, strides=1, padding="same"))
+        model.add(keras.layers.Conv1D(64, nb_classes, strides=1, padding="same"))
         model.add(keras.layers.BatchNormalization())
         model.add(keras.layers.Activation('relu'))
-        model.add(keras.layers.MaxPooling1D(3, strides=2, padding="valid"))
+        model.add(keras.layers.MaxPooling1D(nb_classes, strides=2, padding="valid"))
+        model.add(keras.layers.Dropout(0.2))
 
-        model.add(keras.layers.Conv1D(64, 3, strides=1, padding="same"))
+        model.add(keras.layers.Conv1D(64, nb_classes, strides=1, padding="same"))
         model.add(keras.layers.BatchNormalization())
         model.add(keras.layers.Activation('relu'))
         model.add(keras.layers.Flatten())
-        model.add(keras.layers.Dropout(0.5))
+        model.add(keras.layers.Dropout(0.3))
 
         model.add(keras.layers.Dense(200))
         model.add(keras.layers.Activation('relu'))
 
-        model.add(keras.layers.Dense(3))
+        model.add(keras.layers.Dense(nb_classes))
         model.add(keras.layers.Activation('softmax'))
 
         opt = keras.optimizers.SGD(learning_rate=0.01)
 
-        model.compile(loss=keras.losses.KLDivergence(), optimizer=opt, metrics=['accuracy'])
+        model.compile(loss=keras.losses.KLDivergence(), optimizer=opt, metrics=['accuracy', keras.metrics.Precision(), keras.metrics.Recall()])
 
         file_path = self.output_directory + 'best_model.hdf5'
 
@@ -147,7 +150,8 @@ class Classifier_CNN:
         start_time = time.time()
 
         hist = self.model.fit(x_train, y_train, batch_size=mini_batch_size, epochs=nb_epochs,
-                              verbose=self.verbose, validation_data=(x_val, y_val), callbacks=self.callbacks)
+                              verbose=self.verbose, validation_data=(x_val, y_val), callbacks=self.callbacks,
+                                use_multiprocessing=True)
 
         duration = time.time() - start_time
 
