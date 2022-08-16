@@ -60,25 +60,41 @@ if __name__ == '__main__':
     output_directory_path = os.getcwd() + '\\classifier\\'
     DATA_SIZE = 500
     # arr_filenames = ["df_noise2.csv",  "df_noise.csv", "df_noise3.csv"]
-    dataframes = [load_data(f"data\\df_noise.csv", DATA_SIZE),
-                  load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, :DATA_SIZE], DATA_SIZE,
-                            dataframe=True),  # 1,0
-                  load_data(pd.read_csv("data\\df_noise.csv", header=None,
-                                        skiprows=[i for i in range(1000, 2000)]), DATA_SIZE, dataframe=True),  # 1,2
-                  load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000], DATA_SIZE, dataframe=True)
-                  # 0,2
-                  ]
-    directories = ['noise', '10', '12', '02']
+
+
+    # dataframes = [load_data(f"data\\df_noise.csv", DATA_SIZE),
+    #               load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, :DATA_SIZE], DATA_SIZE,
+    #                         dataframe=True),  # 1,0
+    #               load_data(pd.read_csv("data\\df_noise.csv", header=None,
+    #                                     skiprows=[i for i in range(1000, 2000)]), DATA_SIZE, dataframe=True),  # 1,2
+    #               load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000], DATA_SIZE, dataframe=True)
+    #               # 0,2
+    #               ]
+    dataframes = [
+        load_data(f"data\\test_df_noise.csv", DATA_SIZE),
+        load_data(f"data\\test_df_noise2.csv", DATA_SIZE),
+    ]
+
+    # directories = ['noise', '10', '12', '02']
+    directories = ['test00', 'test22']
+
+
+    # dataframes2 = [
+    #     load_data(f"data\\df_noise.csv", DATA_SIZE),
+    #     load_data(f"data\\df_noise2.csv", DATA_SIZE),
+    #     load_data(f"data\\df_noise3.csv", DATA_SIZE),
+    #     load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, :DATA_SIZE], DATA_SIZE, dataframe=True),  # 1,0
+    #     load_data(pd.read_csv("data\\df_noise.csv", header=None,
+    #                           skiprows=[i for i in range(1000, 2000)]), DATA_SIZE, dataframe=True),  # 1,2
+    #     load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000], DATA_SIZE, dataframe=True) #0,2
+    # ]
+
     dataframes2 = [
         load_data(f"data\\df_noise.csv", DATA_SIZE),
         load_data(f"data\\df_noise2.csv", DATA_SIZE),
         load_data(f"data\\df_noise3.csv", DATA_SIZE),
-        load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, :DATA_SIZE], DATA_SIZE, dataframe=True),  # 1,0
-        load_data(pd.read_csv("data\\df_noise.csv", header=None,
-                              skiprows=[i for i in range(1000, 2000)]), DATA_SIZE, dataframe=True),  # 1,2
-        load_data(pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000], DATA_SIZE, dataframe=True) #0,2
+        load_data(f"data\\df_noise4.csv", DATA_SIZE)
     ]
-    #
 
     for df, directory in zip(dataframes, directories):
         print('data loaded')
@@ -91,27 +107,45 @@ if __name__ == '__main__':
         print('PREDICTION:', prediction)
         # predict(classifier, pd.read_csv("data\\array_eurpln.csv", header=None))
 
-        for _df in dataframes2:
-            _x_train, _y_train, _x_test, _y_test, _y_true, _input_shape, _nb_classes = prepare_data(_df)
-            print(_input_shape)
-            _prediction = classifier.predict(_x_test, _y_true, _x_train, _y_train, _y_test)
-            print('PREDICTION:', _prediction)
+        # for _df in dataframes2:
+        #     _x_train, _y_train, _x_test, _y_test, _y_true, _input_shape, _nb_classes = prepare_data(_df)
+        #     print(_input_shape)
+        #     _prediction = classifier.predict(_x_test, _y_true, _x_train, _y_train, _y_test)
+        #     print('PREDICTION:', _prediction)
 
 
-        # print('prediction of 0,1,2:')
-        # predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[:, 1:],
-        #         pred_rows_used=3000)  # all
+        print('prediction of 0,1,2:')
+        predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[:, 1:],
+                pred_rows_used=3000)  # all
+
+        print('prediction of 0,1:')
+        predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, 1:],
+                pred_rows_used=2000)  # 1 and 0
         #
-        # print('prediction of 0,1:')
-        # predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[0:2000, 1:],
-        #         pred_rows_used=2000)  # 1 and 0
-        # #
-        # print('prediction of 1,2:')
-        # predict(classifier, pd.read_csv("data\\df_noise.csv", header=None,
-        #                                 skiprows=[i for i in range(1000, 2001)]), pred_rows_used=2000)  # 1 and 2
+        print('prediction of 1,2:')
+        predict(classifier, pd.read_csv("data\\df_noise.csv", header=None,
+                                        skiprows=[i for i in range(1000, 2001)]), pred_rows_used=2000)  # 1 and 2
+
+        print('prediction of 0,2:')
+        predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000, 1:],
+                pred_rows_used=2000)  # 0 and 2
+
+
+
+        print('prediction of 0,1,2:')
+        predict(classifier, pd.read_csv("data\\df_noise2.csv", header=None).iloc[:, 1:],
+                pred_rows_used=3000)  # all
+
+        print('prediction of 0,1:')
+        predict(classifier, pd.read_csv("data\\df_noise2.csv", header=None).iloc[0:2000, 1:],
+                pred_rows_used=2000)  # 1 and 0
         #
-        # print('prediction of 0,2:')
-        # predict(classifier, pd.read_csv("data\\df_noise.csv", header=None).iloc[1000:3000, 1:],
-        #         pred_rows_used=2000)  # 0 and 2
+        print('prediction of 1,2:')
+        predict(classifier, pd.read_csv("data\\df_noise2.csv", header=None,
+                                        skiprows=[i for i in range(1000, 2001)]), pred_rows_used=2000)  # 1 and 2
+
+        print('prediction of 0,2:')
+        predict(classifier, pd.read_csv("data\\df_noise2.csv", header=None).iloc[1000:3000, 1:],
+                pred_rows_used=2000)  # 0 and 2
 
         print("-------------------------------finished")

@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
+from math import fabs
 
 import collections
 
@@ -100,3 +101,9 @@ def pred_another(pred, df):
 def pred_uglier(pred, df):
     x = [item for item in pred if round(item[1]) == 1]
     return x
+
+
+def normalize_array(array):
+    array = (array + fabs(2 * min(array))) / max(array)
+    array *= 10
+    return array
