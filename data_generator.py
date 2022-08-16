@@ -26,23 +26,14 @@ array_sin = []
 ROUNDING_DECIMALS = 8
 for i in range(1000):
     A = np.random.uniform(10, 300)  # >0
-    B = np.random.uniform(-A/2, -A / 10)
-    C = np.random.uniform(3, 10)
+    B = np.random.uniform(-A / 2, -A / 10)
+    C = np.random.uniform(3, 10)  # C = abs(np.random.normal())  # |C| < 1=
     tc = np.random.uniform(1, A)
     m = np.random.uniform(0.1, 0.9)  # 0.1 <= m <= 0.9
-    # lambda_val = np.random.uniform(1.8, 2.2)
-    lambda_val = 2
+
+    lambda_val = 2  # lambda_val = np.random.uniform(1.8, 2.2)
     omega = (2 * pi) / (np.log(lambda_val))
-
-    # C = abs(np.random.normal())  # |C| < 1
-    # B = np.random.uniform(-50, 0)  # B < 0
-
-    # B = np.random.uniform(-20, 0)
-
-    # B = -67
     phi = np.random.uniform(-2 * pi, 2 * pi)
-
-    # DATA_SIZE = np.random.randint(400, 1000) przeniesione przed pętlę
     NOISE_FACTOR = 0.0
     CUTOFF = 0.8
 
@@ -58,17 +49,14 @@ for i in range(1000):
     t = t * factor
     tc = max(t)
 
-    simulated_data = pd.Series(data=log_prices, index=np.round(t_cutoff, ROUNDING_DECIMALS))
-
-    logperiodic_sign = pd.Series([1], index=[-0.1])
-    simulated_data = logperiodic_sign.append(simulated_data)
-    # show_plot(line_data, "Logperiodic")
-    # show_plot(simulated_data, f"Logperiodic with cutoff B={B}")
-    print(simulated_data)
-
     line_data = normalize_array(line_data[:-1])
     line_data = np.insert(line_data, 0, 1)  # 0 - nonlogperiodic, 1 - logperiodic, 2 - sinusoid
     array_lp.append(line_data)
+
+    # saving with index
+    simulated_data = pd.Series(data=log_prices, index=np.round(t_cutoff, ROUNDING_DECIMALS))
+    logperiodic_sign = pd.Series([1], index=[-0.1])
+    simulated_data = logperiodic_sign.append(simulated_data)
     array_lp2.append(simulated_data)
 
     #
@@ -90,7 +78,7 @@ for i in range(1000):
     array_sin.append(amplitude)
 
     # show_plot(line_data[1:], f"Przykład logperiodycznosci A={A} B={B} C={C}", bottom=True)
-    # show_plot(cumsum, "Przykład ruch Browna")
+    # show_plot(cumsum[1:], "Przykład ruch Browna")
     # show_plot(amplitude[1:], "Przykład sinusoidy", bottom=True)
 
 dataframe_lp = pd.DataFrame(array_lp, columns=None).round(ROUNDING_DECIMALS)
