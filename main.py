@@ -7,7 +7,7 @@ import pandas as pd
 import sklearn
 import CNN3
 import tensorflow as tf
-from utils.utils import pred_counter, pred_uglier, pred_plot_all_lppls
+from utils.utils import pred_counter, pred_plot_all_lppls
 from sklearn.model_selection import train_test_split
 from LPPL_fitting import LPPL_fit
 
