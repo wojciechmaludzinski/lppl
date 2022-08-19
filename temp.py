@@ -5,19 +5,20 @@ import random
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from utils.utils import df_cut
 
 import LPPL_fitting
 from LPPL_fitting import LPPL_fit
 
 df = pd.read_csv('data\\array_simulated.csv')
 df = df.iloc[:, 1:]
-first_row = df.iloc[8]
+first_row = df.iloc[17]
 data = pd.Series(first_row, dtype=float)
 data.index = data.index.astype(float)
 print(type(data.index))
 
 
-tc = 6
+tc = 50
 m = 4
 lambda_val = 2
 omega = omega = (2 * np.pi) / (np.log(lambda_val))
@@ -40,22 +41,21 @@ if rv.success:
 
     price_tc = rv.A + rv.B * (0.001) ** rv.m + \
                rv.C1 * (0.001) ** rv.m * np.cos(rv.omega * np.log(0.001)) + \
-               rv.C2 * (0.001) ** rv.m * np.sin(rv.omega * np.log(0.001))
+               rv.C2 * 0.001 ** rv.m * np.sin(rv.omega * np.log(0.001))
 
-    # print()
-    # print("== RESULTS ==")
-    # print("  price tc: %.2f (%.2f)" % (price_tc, est_line_data[-2]))
-    # print("   tc:   real value: % 8.2f    estimation: % 8.2f" % (tc, rv.tc))
-    # print("    m:   real value: % 8.2f    estimation: % 8.2f" % (m, rv.m))
-    # print("omega:   real value: % 8.2f    estimation: % 8.2f" % (omega, rv.omega))
-    # print("    A:   real value: % 8.2f    estimation: % 8.2f" % (A, rv.A))
-    # print("    B:   real value: % 8.2f    estimation: % 8.2f" % (B, rv.B))
-    # print("   C1:   real value: % 8.2f    estimation: % 8.2f" % (C1, rv.C1))
-    # print("   C2:   real value: % 8.2f    estimation: % 8.2f" % (C2, rv.C2))
-    # print()
-    # print("== ERROR STATISTICS ==")
-    # print("Mean square error: % 20.2f" % (rv.mse,))
-    # print(" MSE (normalized): % 20.2f" % (rv.norm_mse,))
+    print("== RESULTS ==")
+    print("  price tc: %.2f (%.2f)" % (price_tc, est_line_data[-2]))
+    print("   tc:   real value: % 8.2f    estimation: % 8.2f" % (tc, rv.tc))
+    print("    m:   real value: % 8.2f    estimation: % 8.2f" % (m, rv.m))
+    print("omega:   real value: % 8.2f    estimation: % 8.2f" % (omega, rv.omega))
+    print("    A:   real value: % 8.2f    estimation: % 8.2f" % (A, rv.A))
+    print("    B:   real value: % 8.2f    estimation: % 8.2f" % (B, rv.B))
+    print("   C1:   real value: % 8.2f    estimation: % 8.2f" % (C1, rv.C1))
+    print("   C2:   real value: % 8.2f    estimation: % 8.2f" % (C2, rv.C2))
+    print()
+    print("== ERROR STATISTICS ==")
+    print("Mean square error: % 20.2f" % (rv.mse,))
+    print(" MSE (normalized): % 20.2f" % (rv.norm_mse,))
 
     plt.plot(data.index, data.values, '.')
     plt.title('Real data')

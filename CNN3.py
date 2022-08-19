@@ -32,34 +32,7 @@ class Classifier_CNN:
         if input_shape[0] < 60:
             padding = 'same'
 
-        # model = keras.models.Sequential()
-        # model.add(keras.layers.Conv1D(filters=64, kernel_size=9, activation='relu', input_shape=input_shape))
-        # model.add(keras.layers.Conv1D(filters=64, kernel_size=9, activation='sigmoid'))
-        # model.add(keras.layers.Dropout(0.5))
-        # model.add(keras.layers.MaxPooling1D(pool_size=4))
-        # model.add(keras.layers.Flatten())
-        # model.add(keras.layers.Dense(100, activation='sigmoid'))
-        # model.add(keras.layers.Dense(2, activation='softmax'))
-
-        # model = keras.models.Sequential()
-        # model.add(keras.layers.Conv1D(64, 100, activation='relu', input_shape=(input_shape),
-        #                  kernel_initializer=glorot_uniform(seed=1337)))
-        # model.add(keras.layers.BatchNormalization())
-        # model.add(keras.layers.Conv1D(512, 100, activation='relu', input_shape=(input_shape),
-        #                               kernel_initializer=glorot_uniform(seed=1337)))
-        # model.add(keras.layers.Flatten())
-        # model.add(keras.layers.Dropout(0.5))
-        # model.add(keras.layers.Dense(128, activation='relu', kernel_initializer=glorot_uniform(seed=1337)))
-        # model.add(keras.layers.BatchNormalization())
-        # model.add(keras.layers.Dropout(0.5))
-        # model.add(keras.layers.Dense(1, activation='sigmoid', kernel_initializer=glorot_uniform(seed=1337)))
-        # model.compile(loss='binary_crossentropy', optimizer=keras.optimizers.Adam(lr=0.0005), metrics=['accuracy'])
-        #
-        # model.compile(loss='mean_squared_error', optimizer=keras.optimizers.Adam(),
-        #               metrics=['accuracy'])
-
         model = keras.models.Sequential()
-
         model.add(keras.layers.Input(shape=input_shape))
 
         model.add(keras.layers.Conv1D(16, 64, strides=1, padding="same", input_shape=input_shape))
@@ -99,42 +72,10 @@ class Classifier_CNN:
         opt = keras.optimizers.SGD(learning_rate=0.01)
 
         model.compile(loss=keras.losses.KLDivergence(), optimizer=opt, metrics=['accuracy', keras.metrics.Precision(), keras.metrics.Recall()])
-
         file_path = self.output_directory + 'best_model.hdf5'
-
         model_checkpoint = keras.callbacks.ModelCheckpoint(filepath=file_path, monitor='loss',
                                                            save_best_only=True)
-
         self.callbacks = [model_checkpoint]
-
-
-        # for layer in model.layers:
-        #     if 'conv' in layer.name:
-        #         weights, bias = layer.get_weights()
-                # print(layer.name)
-                # # print(weights.shape)
-                # print(bias.shape)
-
-                # normalize filter values between  0 and 1 for visualization
-                # f_min, f_max = weights.min(), weights.max()
-                # filters = (weights - f_min) / (f_max - f_min)
-                # # print(filters.shape[0],filters.shape[1], filters.shape[2])
-                # filter_cnt = 1
-                #
-                # # plotting all the filters
-                # for i in range(filters.shape[2]):
-                #     # get the filters
-                #     filt = filters[:, :, i]
-                #     plt.plot(filt)
-                #     plt.show()
-                #     # plotting each of the channel, color image RGB channels
-                #     for j in range(filters.shape[0]):
-                #         ax = plt.subplot(filters.shape[2], filters.shape[0], filter_cnt)
-                #         ax.set_xticks([])
-                #         ax.set_yticks([])
-                #         plt.imshow(filt[:, j])
-                #         filter_cnt += 1
-                # plt.show()
 
         return model
 
@@ -185,6 +126,7 @@ class Classifier_CNN:
         y_pred = model.predict(x_test)
         return y_pred
 
+    #  Not working yet
     def visualize_filter(self, x_train, y_train):
 
         x_train = x_train.reshape(x_train.shape[0], x_train.shape[1], 1)

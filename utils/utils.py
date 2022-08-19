@@ -84,13 +84,13 @@ def pred_beautifier2(pred):
     return a, b, c
 
 
-def pred_beautifier(pred):
+def pred_counter(pred):
     return [round(item[0]) for item in pred].count(1), \
            [round(item[1]) for item in pred].count(1), \
            [round(item[2]) for item in pred].count(1)
 
 
-def pred_another(pred, df):
+def pred_plot_all_lppls(pred, df):
     x = [np.argmax(item) for item in pred]
     indexes = [index for index in range(len(x)) if x[index] == 1]
     for index in indexes:
@@ -98,12 +98,24 @@ def pred_another(pred, df):
         plt.show()
 
 
-def pred_uglier(pred, df):
-    x = [item for item in pred if round(item[1]) == 1]
-    return x
-
-
+# Returns array with y in 0-10 range
 def normalize_array(array):
-    array = (array + fabs(2 * min(array))) / max(array)
+    array = array + fabs(2 * min(array))
+    array = array / max(array)
     array *= 10
     return array
+
+
+# Returns dataframe without last n columns
+def df_cut(df, n=100):
+    return df.iloc[:, :-n]
+
+
+def df_index(df, hasFirstRow=True):
+    data_columns = len(df.columns)
+    if hasFirstRow:
+        data_columns = len(df.columns)-1 #First column is with type
+
+    line_data_index = np.linspace(0, data_columns, data_columns)
+
+

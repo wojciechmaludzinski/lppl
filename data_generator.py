@@ -3,7 +3,7 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 from math import pi, fabs
-from utils.utils import normalize_array
+from utils.utils import normalize_array, df_index
 
 
 def show_plot(data, title=" ", bottom=False):
@@ -24,11 +24,11 @@ array_lp, array_lp2 = [], []
 array_cs = []
 array_sin = []
 ROUNDING_DECIMALS = 8
-for i in range(1000):
+for i in range(2):
     A = np.random.uniform(10, 300)  # >0
     B = np.random.uniform(-A / 2, -A / 10)
     C = np.random.uniform(3, 10)  # C = abs(np.random.normal())  # |C| < 1=
-    tc = np.random.uniform(1, A)
+    tc = DATA_SIZE - 1
     m = np.random.uniform(0.1, 0.9)  # 0.1 <= m <= 0.9
 
     lambda_val = 2  # lambda_val = np.random.uniform(1.8, 2.2)
@@ -49,7 +49,9 @@ for i in range(1000):
     t = t * factor
     tc = max(t)
 
+    show_plot(line_data)
     line_data = normalize_array(line_data[:-1])
+    show_plot(line_data)
     line_data = np.insert(line_data, 0, 1)  # 0 - nonlogperiodic, 1 - logperiodic, 2 - sinusoid
     array_lp.append(line_data)
 
@@ -90,8 +92,8 @@ dataframe_sin = pd.DataFrame(array_sin, columns=None).round(ROUNDING_DECIMALS)
 # dataframe_sin.to_csv('data\\array_sin.csv', index=False, header=False)
 
 df_all_rows = pd.concat([dataframe_lp, dataframe_cs, dataframe_sin])
-df_all_rows.to_csv('data\\array_500.csv', index=False, header=False)
+# df_all_rows.to_csv('data\\array_500.csv', index=False, header=False)
 
-# dataframe_simulated = pd.DataFrame(array_lp2).round(ROUNDING_DECIMALS)
-# dataframe_simulated.to_csv('data\\array_simulated.csv', index=False, header=True)
+dataframe_simulated = pd.DataFrame(array_lp2).round(ROUNDING_DECIMALS)
+dataframe_simulated.to_csv('data\\array_simulated.csv', index=False, header=True)
 # # dataframe_sim.T.to_csv('data\\array_sim.csv', index=False, header=True)

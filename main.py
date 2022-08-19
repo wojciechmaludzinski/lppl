@@ -7,7 +7,7 @@ import pandas as pd
 import sklearn
 import CNN3
 import tensorflow as tf
-from utils.utils import pred_beautifier, pred_uglier, pred_another
+from utils.utils import pred_counter, pred_uglier, pred_plot_all_lppls
 from sklearn.model_selection import train_test_split
 from LPPL_fitting import LPPL_fit
 
@@ -51,8 +51,8 @@ def prepare_data(df):
 
 def predict(clf, df, pred_rows_used=500):
     df_smaller = df.iloc[:pred_rows_used, :DATA_SIZE - 1]
-    print(pred_beautifier(clf.predicting(df_smaller)))
-    print(pred_another(clf.predicting(df_smaller), df_smaller))
+    print(pred_counter(clf.predicting(df_smaller)))
+    print(pred_plot_all_lppls(clf.predicting(df_smaller), df_smaller))
 
 
 if __name__ == '__main__':
