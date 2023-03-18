@@ -23,8 +23,9 @@ DATA_SIZE = 500
 array_lp, array_lp2 = [], []
 array_cs = []
 array_sin = []
+array_up = []
 ROUNDING_DECIMALS = 8
-for i in range(2):
+for i in range(1000):
     A = np.random.uniform(10, 300)  # >0
     B = np.random.uniform(-A / 2, -A / 10)
     C = np.random.uniform(3, 10)  # C = abs(np.random.normal())  # |C| < 1=
@@ -49,9 +50,7 @@ for i in range(2):
     t = t * factor
     tc = max(t)
 
-    show_plot(line_data)
     line_data = normalize_array(line_data[:-1])
-    show_plot(line_data)
     line_data = np.insert(line_data, 0, 1)  # 0 - nonlogperiodic, 1 - logperiodic, 2 - sinusoid
     array_lp.append(line_data)
 
@@ -71,6 +70,17 @@ for i in range(2):
     array_cs.append(cumsum)
 
     #
+    # WHITE NOISE CUMSUM WITH UPWARDS TREND
+    #
+    upwardness = np.arange(DATA_SIZE)
+    upwards = cumsum * upwardness
+    upwards = normalize_array(upwards)
+    array_up.append(upwards)
+
+
+
+
+    #
     # SINUSOID
     #
     time = np.arange(0, DATA_SIZE / 10, 0.1)
@@ -82,18 +92,20 @@ for i in range(2):
     # show_plot(line_data[1:], f"Przykład logperiodycznosci A={A} B={B} C={C}", bottom=True)
     # show_plot(cumsum[1:], "Przykład ruch Browna")
     # show_plot(amplitude[1:], "Przykład sinusoidy", bottom=True)
+    # show_plot(upwards[1:])
 
 dataframe_lp = pd.DataFrame(array_lp, columns=None).round(ROUNDING_DECIMALS)
 dataframe_cs = pd.DataFrame(array_cs, columns=None).round(ROUNDING_DECIMALS)
 dataframe_sin = pd.DataFrame(array_sin, columns=None).round(ROUNDING_DECIMALS)
+dataframe_up = pd.DataFrame(array_up, columns=None).round(ROUNDING_DECIMALS)
 
 # dataframe_lp.to_csv('data\\array_lp.csv', index=False, header=False)
 # dataframe_cs.to_csv('data\\array_cs.csv', index=False, header=False)
 # dataframe_sin.to_csv('data\\array_sin.csv', index=False, header=False)
 
 df_all_rows = pd.concat([dataframe_lp, dataframe_cs, dataframe_sin])
-# df_all_rows.to_csv('data\\array_500.csv', index=False, header=False)
+df_all_rows.to_csv('data\\array_500up.csv', index=False, header=False)
 
-dataframe_simulated = pd.DataFrame(array_lp2).round(ROUNDING_DECIMALS)
-dataframe_simulated.to_csv('data\\array_simulated.csv', index=False, header=True)
+# dataframe_simulated = pd.DataFrame(array_lp2).round(ROUNDING_DECIMALS)
+# dataframe_simulated.to_csv('data\\array_simulated.csv', index=False, header=True)
 # # dataframe_sim.T.to_csv('data\\array_sim.csv', index=False, header=True)

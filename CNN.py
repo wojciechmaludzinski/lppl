@@ -12,12 +12,12 @@ from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, Conv2D
 
 PATH = os.getcwd()
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0' # 0=GPU, -1=CPU
 
-if tf.test.gpu_device_name():
-    print('GPU found')
+if tf.config.list_physical_devices():
+    print("GPU is available")
 else:
-    print("No GPU found")
+    print("GPU is not available")
 
 # Import libraries
 

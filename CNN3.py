@@ -1,5 +1,5 @@
 import tensorflow
-import tensorflow.keras as keras
+from tensorflow import keras
 import tensorflow as tf
 import numpy as np
 import time
@@ -86,7 +86,7 @@ class Classifier_CNN:
 
         # x_val and y_val are only used to monitor the test loss and NOT for training
         mini_batch_size = 10
-        nb_epochs = 80
+        nb_epochs = 225 #225 jest git ale na próbe można 80 albo mniej bo szybciej
 
         start_time = time.time()
 

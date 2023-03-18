@@ -109,14 +109,14 @@ def plot_four_noises(df1, df2, df3, df4, row, with_original=False, original=df, 
     plt.show()
 
 
-df_noise = add_noise5(df, 0.5)
-df_noise2 = add_noise5(df, 1)
-df_noise3 = add_noise5(df, 3)
-df_noise4 = add_noise5(df, 5)
+df_noise = add_noise2(df, 0.5)
+df_noise2 = add_noise2(df, 1)
+df_noise3 = add_noise2(df, 3)
+df_noise4 = add_noise2(df, 5)
 
 
 # plot_four_noises(df, df_noise, df_noise2, df_noise3, 15, with_original=True)
-indexes = [19, 1019, 2019]
+indexes = [20, 1020, 21, 1021, 22, 1022, 23, 1023]
 for num in indexes:
     plot_four_noises(df, df_noise, df_noise2, df_noise3, num, with_original=True)
 
