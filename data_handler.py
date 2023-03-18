@@ -1,6 +1,14 @@
 import numpy as np
 import pandas as pd
 import sklearn
+import os
+
+
+def get_data_size():
+    return 500
+
+def get_output_dir():
+    return str(os.getcwd() + '\\classifier\\')
 
 '''Loads data and shuffles it'''
 def load_data(path_or_df, columns, dataframe=False):

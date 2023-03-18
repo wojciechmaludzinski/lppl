@@ -4,7 +4,7 @@ import random
 import matplotlib.pyplot as plt
 from math import pi, fabs
 from utils.utils import normalize_array, df_index
-
+from data_handler import get_data_size
 
 def show_plot(data, title=" ", bottom=False):
     plt.plot(data)
@@ -19,7 +19,7 @@ def show_plot(data, title=" ", bottom=False):
 # disable warnings
 np.seterr(divide='ignore', invalid='ignore', over='ignore')
 plt.axis('off')
-DATA_SIZE = 500
+DATA_SIZE = get_data_size()
 array_lp, array_lp2 = [], []
 array_cs = []
 array_sin = []
