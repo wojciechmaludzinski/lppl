@@ -8,45 +8,8 @@ import sklearn
 import CNN3
 import tensorflow as tf
 from utils.utils import pred_counter, pred_plot_all_lppls
-from sklearn.model_selection import train_test_split
 from LPPL_fitting import LPPL_fit
-
-
-def load_data(path_or_df, columns, dataframe=False):
-    if dataframe:
-        return path_or_df.sample(frac=1).reset_index(drop=True).iloc[:, :columns]
-
-    return pd.read_csv(path_or_df, header=None).sample(frac=1).reset_index(drop=True).iloc[:, :columns]
-
-
-def prepare_data(df):
-    train_size = int(0.7 * len(df))
-    train_set = df[:train_size]
-    test_set = df[train_size:]
-    _y_train = np.array(train_set[train_set.columns[0]])
-    _y_test = np.array(test_set[test_set.columns[0]])
-    _x_train = np.array(train_set.iloc[:, 1:])
-    _x_test = np.array(test_set.iloc[:, 1:])
-
-    _nb_classes = len(np.unique(np.concatenate((_y_train, _y_test), axis=0)))
-
-    # transform the labels from integers to one hot vectors
-    enc = sklearn.preprocessing.OneHotEncoder(categories='auto')
-    enc.fit(np.concatenate((_y_train, _y_test), axis=0).reshape(-1, 1))
-    _y_train = enc.transform(_y_train.reshape(-1, 1)).toarray()
-    _y_test = enc.transform(_y_test.reshape(-1, 1)).toarray()
-
-    # save orignal y because later we will use binary
-    _y_true = np.argmax(_y_test, axis=1)
-
-    if len(_x_train.shape) == 2:  # if univariate
-        # add a dimension to make it multivariate with one dimension
-        _x_train = _x_train.reshape((_x_train.shape[0], _x_train.shape[1], 1))
-        _x_test = _x_test.reshape((_x_test.shape[0], _x_test.shape[1], 1))
-
-    _input_shape = _x_train.shape[1:]
-
-    return _x_train, _y_train, _x_test, _y_test, _y_true, _input_shape, _nb_classes
+from data_handler import load_data, prepare_data
 
 
 def predict(clf, df, pred_rows_used=500):
