@@ -2,12 +2,14 @@ import numpy as np
 import pandas as pd
 import sklearn
 
+'''Loads data and shuffles it'''
 def load_data(path_or_df, columns, dataframe=False):
     if dataframe:
         return path_or_df.sample(frac=1).reset_index(drop=True).iloc[:, :columns]
 
     return pd.read_csv(path_or_df, header=None).sample(frac=1).reset_index(drop=True).iloc[:, :columns]
 
+'''Retruns all necessery x and y'''
 def prepare_data(df):
     train_size = int(0.7 * len(df))
     train_set = df[:train_size]
@@ -37,19 +39,33 @@ def prepare_data(df):
 
     return _x_train, _y_train, _x_test, _y_test, _y_true, _input_shape, _nb_classes
 
-def split_list(_list, group_size, overlap_size):
-        return [_list[i:i + group_size] for i in range(0, len(_list), group_size - overlap_size)]
+'''
+Returns only list of length group_size, for skip_size=5 it's [[1,2,..500], [6,7,..505]..]
+If list from file, then _list=open('numbers.txt').read().splitlines()
+'''
+def split_list(_list, group_size=500, skip_size=5):
+    result = []
+    for i in range(0, len(_list), skip_size):
+        group = _list[i:i + group_size]
+        if len(group) == group_size:
+            result.append(group)
+    return result
 
+'''
+example path: "C:\\Users\\Wojtek\\Repos\\download\\eurpln-h1-bid-2008-01-01-2009-01-01.csv"
+get from script program
+'''
 def modify_currencies(path):
-    #example path: "C:\\Users\\Wojtek\\Repos\\download\\eurpln-h1-bid-2008-01-01-2009-01-01.csv"
-    #get from script program
     df = pd.read_csv(path,
                  header=[0])
-    last = df.iloc[:, -1]
-    lastlist = last.values.tolist()
-
-    nicelist = split_list(lastlist, 500, 495)
-    # print(nicelist[1:100])
+    nicelist = split_list(df.iloc[:, -1].values.tolist(), 500, 5)
 
     dataframe = pd.DataFrame(nicelist, columns=None)
     dataframe.to_csv('data\\array_eurpln.csv', index=False, header=False)
+
+
+
+    
+#Deprecated
+def split_list_diff_sizes(_list, group_size=500, skip_size=5):
+        return [_list[i:i + group_size] for i in range(0, len(_list), skip_size)]

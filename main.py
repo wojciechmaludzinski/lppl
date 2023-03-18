@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-import pandas
-# Press the green button in the gutter to run the script.
 import pandas as pd
 import sklearn
 import CNN3
@@ -24,6 +22,7 @@ if __name__ == '__main__':
     DATA_SIZE = 500
     # arr_filenames = ["df_noise2.csv",  "df_noise.csv", "df_noise3.csv"]
     data_sizes = [500, 450, 400, 350, 300, 100]
+    
 
 
     # dataframes = [load_data(f"data\\df_noise.csv", DATA_SIZE),
